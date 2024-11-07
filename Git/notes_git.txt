@@ -1,0 +1,112 @@
+# Конфигурации #
+    * Системная - уровень системы (все пользователи + все проекты) - установочная директория Git /etc/gitconfig
+        $ git config --system
+
+    * Глобальная - уровень пользователя - в домашней директории пользователя файл .gitconfig
+        $ git config --global
+
+    * Локальная - уровень репозитория - файл .git/config внутри репо
+        $ git config --local (default)
+
+    Посмотреть все настройки и узнать, где они заданы:
+        $ git config --list --show-origin
+    
+    Имя пользователя
+        $ git config --global user.name
+        $ git config --global user.email
+    
+    Помощь
+        $ git help <command>
+        $ git <command> --help
+        Пример:
+        $ git help config
+    
+    Краткая помощь
+        $ git <command> -h
+
+#############################
+
+# Инициализация репозитория #
+
+    1. Перейти в директорию проекта
+    2. Создать пустой репозиторий (делается один раз):
+        $ git init
+    Репозиторий создан в подкаталоге .git:
+        :: Initialized empty Git repository in D:/Courses/Git/.git/
+# Разгитить
+    rm -rf .git
+
+# Проверить состояние репозитория 
+    git status
+
+# Клонирование удалённого репо
+    1. Получить ссылку вида https://github.com/YakuninSergey/learning-notes.git
+    2. Перейти в нужную папку и клонировать командой:
+        $ git clone <ссылка>
+
+        >> $ git clone https://github.com/YakuninSergey/learning-notes.git       
+        ::
+        Cloning into 'learning-notes'...
+        remote: Enumerating objects: 6, done.
+        remote: Counting objects: 100% (6/6), done.
+        remote: Compressing objects: 100% (3/3), done.
+        remote: Total 6 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+        Receiving objects: 100% (6/6), done.
+
+# Установка связи локального и уждалённого репо
+    1. Перейти в папку с инициированным локальным репо
+    2. Ввести команду:
+        $ git remote add origin <ссылка на удалённый репо для SSH>
+        ссылка на удалённый репо для SSH: 
+            git@github.com:<Аккаунт на GitHub - имя в профиле>/<Название репо - название на странице репо>.git
+            git@github.com:YakuninSergey/learning-notes.git        
+    
+    Чтобы проверить установилась ли связь с удалённым репо, ввести команду:
+        $ git remote
+
+        >> $ git remote
+        :: origin
+        
+        >> $ git remote -v
+        :: origin  git@github.com:YakuninSergey/learning-notes.git (fetch)
+        :: origin  git@github.com:YakuninSergey/learning-notes.git (push)
+
+
+    Для того, чтобы постмотреть URL удалённого репозитория:
+        $ git remote get-url origin
+        :: https://github.com/YakuninSergey/learning-notes.git
+
+
+# Подготовить файлы к сохранению 
+    $ git add <имя файла>
+    $ git add --all
+    $ git add .
+
+# Выполнить коммит 
+    $ git commit -m <Текст коммента>
+
+# Генерируем SSH-ключ
+    При генерации важно использовать только знаение по умолчанию для имени файла, пути и т.д.
+
+    $ ls -la .ssh/ # вывели список созданных ключей в директории .ssh/ находящейся в директори пользователя
+    1. Заходим в терминал в директорию .ssh (если там уже есть id_rsa - сохраняем его куда-нибудь отдельно)
+        $ ssh-keygen -t ed25519 -C "электронная почта, к которой привязан ваш аккаунт на GitHub"
+        или
+        $ ssh-keygen -t rsa -b 4096 -C "электронная почта, к которой привязан ваш аккаунт на GitHub"
+    2. НЕ указываем имя файла - просто жмём Enter. При запросе passphrase просто жмём Enter - т.е. оставляем passphrase пустым
+    3. Должны быть созданы 2 файла - id_rsa - один с расширением .pub
+    4. Копируем содержимое .pub в буфер обмена
+    5. Идём на GitHub в Settings > SSH and GPG keys > SSH keys > New SSH key
+    6. Вставляем содержимое .pub в поле
+    7. Проверить правильность ключа:
+        $ ssh -i <Полный путь к ключу> -T git@github.com
+        Путь например: /c/Users/yakun/.ssh/ed25519/2024-11-07_key
+        
+        Если ключ подходит появится сообщение:
+        Hi %ВАШ_АККАУНТ%! You've successfully authenticated, but GitHub does not provide shell access. 
+
+    8. Добавляем SSH ключ к агенту.
+        $ ssh-add c:/Users/YOU/.ssh/id_ed25519
+
+# Отправить изменения на удалённый репозиторий
+    $ git push -u origin main

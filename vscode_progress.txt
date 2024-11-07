@@ -1,0 +1,8 @@
+VS Code
+
+14:46 10.10.2024
+* Change color theme *
+Ctlr+K & Ctrl+T
+
+* Keyboard shortcuts*
+Ctrl+K & Ctrl+S
